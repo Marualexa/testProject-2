@@ -2,7 +2,7 @@ import { ref } from "vue";
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://swapi.dev/api/",
+    baseURL: import.meta.env.API_URL,
     headers: {
         "Content-Type": "application/json;charset=utf-8",
     },

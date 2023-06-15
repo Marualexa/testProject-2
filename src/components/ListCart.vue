@@ -13,11 +13,13 @@
       />
     </div>
   </section>
+  <Pagination @current-page="pageItems" />
 </template>
 
 <script setup>
 import HeaderSearch from "./headerSearch.vue";
 import CartProduct from "./CartProduct.vue";
+import Pagination from "./pagination.vue";
 import { useAsync } from "../hooks/useAsync";
 import { onMounted } from "vue";
 
@@ -25,7 +27,6 @@ const { results, makeRequest } = useAsync();
 
 const items = async () => {
   await makeRequest("people");
-  console.log("resultado", results.value);
   return results.value;
 };
 
@@ -37,7 +38,12 @@ const eventSearch = async (args) => {
   await makeRequest("people/", {
     search: args,
   });
-  console.log("emit", args);
+};
+
+const pageItems = async (cur) => {
+  await makeRequest("people/", {
+    page: cur,
+  });
 };
 </script>
 

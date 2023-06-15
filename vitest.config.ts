@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vitest/config";
 import Vue from "@vitejs/plugin-vue";
 import path from 'path'

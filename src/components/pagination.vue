@@ -1,70 +1,47 @@
 <template>
-  <div class="containe-pagin">
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <a @click="back" v-if="page != 1" class="page-link" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-            <span class="sr-only">Previous</span>
-          </a>
-        </li>
-        <li
-          v-for="{ numberPage, id } in userPeople"
-          :key="id"
-          class="page-item"
-          :class="{ active: isCurrent(numberPage) }"
+  <nav aria-label="Page navigation example">
+    <ul class="pagination" @click="pageCurrent">
+      <li class="page-item">
+        <a
+          @click="back"
+          :class="{ 'page-link': true, 'page-link': true, disabled: currentPage === 1 }"
+          class="page-link"
+          href="#"
+          aria-label="Previous"
         >
-          <a @click="pageEvent(numberPage)" class="page-link">{{ numberPage }}</a>
-        </li>
-        <li class="page-item">
-          <a
-            @click="forward"
-            v-if="page < userPeople.length"
-            class="page-link"
-            aria-label="Next"
-          >
-            <span aria-hidden="true">&raquo;</span>
-            <span class="sr-only">Next</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item">
+        <a @click="forward" class="page-link" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 </template>
 
 <script setup>
-import { inject, ref, defineEmits, watch } from 'vue';
+import { ref, defineEmits } from "vue";
 
-const userPeople = ref([]);
-const { page } = inject("page");
-const emit = defineEmits(["pageEvent"]);
-const { resultData } = inject("page");
+const currentPage = ref(1);
+const emit = defineEmits(["currentPage"]);
 
-const isCurrent = (nPage) => (nPage == page.value ? true : false);
-
-function pageEvent(numberPage) {
-    emit("pageEvent", numberPage);
+function pageCurrent() {
+  emit("currentPage", currentPage.value);
 }
 
-watch(
-    () => resultData.value,
-    (val) => {
-        const newUsers = [...Array(resultData.value)].map((user, index) => ({
-            numberPage: index + 1,
-            id: `${index + 1}`,
-        }));
-        userPeople.value = newUsers;
-    },
-    { inmediate: true}
-);
-
 function back() {
-    const newNumberPage = Number(page.value);
-    emit("pageEvent", newNumberPage - 1);
+  if (currentPage.value > 1) {
+    currentPage.value = Number(currentPage.value) - 1;
+  }
 }
 
 function forward() {
-    const newNumberPage = Number(page.value);
-    emit("pageEvent", newNumberPage + 1);
+  currentPage.value = Number(currentPage.value) + 1;
 }
 </script>
+
+<style lang="sass">
+@import "../sass/styleGlobal.scss"
+</style>
